@@ -16,7 +16,7 @@ module fifo
   reg [BITS-1:0] queue [0:DEPTH-1];
   reg [DEPTH-1:0] counter                               // counts how many queue entries are full
   
-  assign q = queue[0]                                   // [0] is the head of the queue
+  assign q = queue[0];                                  // [0] is the head of the queue
 
   always_ff @(posedge clk, negedge rst_n) begin
   	if (en == 0);
@@ -31,7 +31,7 @@ module fifo
         end else begin
           for (int i = 0; i < DEPTH -1; i = i+1)
             queue[i] <= queue[i+1];											// shifts values through fifo
-  			  queue[DEPTH - 1] <= d;                        // shifts in d
+          queue[DEPTH - 1] <= d;                        // shifts in d
         end
       end
     end
