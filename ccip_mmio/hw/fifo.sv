@@ -14,7 +14,7 @@ module fifo
   output [BITS-1:0] q
   );
   reg [BITS-1:0] queue [0:DEPTH-1];
-  reg [DEPTH-1:0] counter                               // counts how many queue entries are full
+  reg [DEPTH-1:0] counter;                              // counts how many queue entries are full
   
   assign q = queue[0];                                  // [0] is the head of the queue
 
