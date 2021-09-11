@@ -26,7 +26,7 @@ module fifo
         counter <= 0;
       end else begin
         if (counter < DEPTH) begin
-          queue[counter] <= d
+          queue[counter] <= d;
           counter <= counter + 1;
         end else begin
           for (int i = 0; i < DEPTH -1; i = i+1)
