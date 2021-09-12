@@ -19,12 +19,12 @@ module fifo
   assign q = queue[0];                                  // [0] is the head of the queue
 
   always_ff @(posedge clk, negedge rst_n) begin
-  	if (en == 0);
-    else begin
-      if (!rst_n) begin
-        for (int i = 0; i < DEPTH; i++) queue[i] <= 0;	// reset all fifo values to 0	
+  	if (!rst_n) begin
+        for (int i = 0; i < DEPTH; i = i + 1) queue[i] <= 0;	// reset all fifo values to 0	
         counter <= 0;
-      end else begin
+    end else begin
+      if (!en);
+      else begin
         if (counter < DEPTH) begin
           queue[counter] <= d;
           counter <= counter + 1;
