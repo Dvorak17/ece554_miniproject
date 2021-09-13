@@ -73,33 +73,29 @@ module afu
 
    // Instantiation of fifo
    wire [63:0] out;
+   logic [63:0] in;
    logic en;
-   fifo   buffer(.clk(clk), .rst_n(rst), .en(en), .d(user_reg), .q(out));
+   fifo buffer (.clk(clk), .rst_n(rst), .en(en), .d(in), .q(out));
 
    // =============================================================//   
    // MMIO write code
    // =============================================================// 		    
    always_ff @(posedge clk)
-     begin 
-        if (!rst);
-        else
-          begin
-             // Check to see if there is a valid write being received from the processor.
-             en <= 1'b0;
-             if (rx.c0.mmioWrValid == 1)
-               begin
-		  // Check the address of the write request. If it matches the address of the
-		  // memory-mapped register (h0020), then write the received data on channel c0 
-		  // to the register.
-                  case (mmio_hdr.address)
-                    16'h0020: begin
-                      user_reg <= rx.c0.data[63:0];
-                      en <= 1'b1;
-                    end
-                  endcase
-               end
+        if (!rst) begin
+          en <= 1'b0;
+          // Check to see if there is a valid write being received from the processor.
+          if (rx.c0.mmioWrValid == 1) begin
+		        // Check the address of the write request. If it matches the address of the
+		        // memory-mapped register (h0020), then write the received data on channel c0 
+		        // to the register.
+            case (mmio_hdr.address)
+              16'h0020: begin
+                in <= rx.c0.data[63:0];
+                en <= 1'b1;
+              end
+            endcase
           end
-     end
+        end
 
    // ============================================================= 		    
    // MMIO read code
@@ -141,15 +137,15 @@ module afu
 		    
                     // AFU header
                     16'h0000: tx.c2.data <= {
-					     4'b0001, // Feature type = AFU
-					     8'b0,    // reserved
-					     4'b0,    // afu minor revision = 0
-					     7'b0,    // reserved
-					     1'b1,    // end of DFH list = 1
-					     24'b0,   // next DFH offset = 0
-					     4'b0,    // afu major revision = 0
-					     12'b0    // feature ID = 0
-					     };
+					            4'b0001, // Feature type = AFU
+					            8'b0,    // reserved
+					            4'b0,    // afu minor revision = 0
+					            7'b0,    // reserved
+					            1'b1,    // end of DFH list = 1
+					            24'b0,   // next DFH offset = 0
+					            4'b0,    // afu major revision = 0
+					            12'b0    // feature ID = 0
+					          };
 
                     // AFU_ID_L
                     16'h0002: tx.c2.data <= afu_id[63:0];

@@ -15,7 +15,6 @@ module fifo
   );
   reg [BITS-1:0] queue [0:DEPTH-1];
   
-  assign q = queue[DEPTH-1];                                  // [0] is the head of the queue
 
   always_ff @(posedge clk, negedge rst_n) begin
   	if (!rst_n)
@@ -23,12 +22,15 @@ module fifo
     else begin
       if (!en);
       else begin
-        for (int i = DEPTH-1; i > 0; i = i-1)
-          queue[i] <= queue[i-1];											        // shifts values through fifo
+        for (int i = DEPTH-1; i > 0; i = i-1) begin
+          queue[i] <= queue[i-1];			  							        // shifts values through fifo
+        end
         queue[0] <= d;                                        // shifts in d
       end
     end
   end
-  	
+  
+  assign q = queue[DEPTH-1];                                  // [0] is the head of the queue
+
 endmodule // fifo
 
