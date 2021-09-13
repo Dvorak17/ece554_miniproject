@@ -79,9 +79,9 @@ module afu
    // =============================================================//   
    // MMIO write code
    // =============================================================// 		    
-   always_ff @(posedge clk or posedge rst)
+   always_ff @(posedge clk)
      begin 
-        if (rst);
+        if (!rst);
         else
           begin
              // Check to see if there is a valid write being received from the processor.
