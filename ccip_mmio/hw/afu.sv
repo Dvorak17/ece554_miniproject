@@ -85,15 +85,17 @@ module afu
         else
           begin
              // Check to see if there is a valid write being received from the processor.
-             en <= 0;
+             en <= 1'b0;
              if (rx.c0.mmioWrValid == 1)
                begin
-                 en <= 1;
-		  // Check the address of the write request. If it maches the address of the
+		  // Check the address of the write request. If it matches the address of the
 		  // memory-mapped register (h0020), then write the received data on channel c0 
 		  // to the register.
                   case (mmio_hdr.address)
-                    16'h0020: user_reg <= rx.c0.data[63:0];
+                    16'h0020: begin
+                      user_reg <= rx.c0.data[63:0];
+                      en <= 1'b1;
+                    end
                   endcase
                end
           end
