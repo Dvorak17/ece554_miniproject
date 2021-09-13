@@ -74,7 +74,7 @@ module afu
    // Instantiation of fifo
    wire [63:0] out;
    logic en;
-   fifo   buffer(.clk(clk), .rst_n(rst_n), .en(en), .d(user_reg), .q(out));
+   fifo   buffer(.clk(clk), .rst_n(rst), .en(en), .d(user_reg), .q(out));
 
    // =============================================================//   
    // MMIO write code
