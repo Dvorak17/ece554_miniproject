@@ -73,7 +73,8 @@ module afu
 
    // Instantiation of fifo
    logic [63:0] out;
-   fifo   buffer(.clk(clk), .rst_n(rst_n), .en(rx.c0.mmioWrValid), .d(user_reg), .q(out));
+   logic en;
+   fifo   buffer(.clk(clk), .rst_n(rst_n), .en(en), .d(user_reg), .q(out));
 
    // =============================================================//   
    // MMIO write code
@@ -84,12 +85,14 @@ module afu
           begin 
 	     // Asnchronous reset for the memory-mapped register.
 	     user_reg <= '0;
+       en <= 0;
           end
         else
           begin
              // Check to see if there is a valid write being received from the processor.
              if (rx.c0.mmioWrValid == 1)
                begin
+                 en <= 1;
 		  // Check the address of the write request. If it maches the address of the
 		  // memory-mapped register (h0020), then write the received data on channel c0 
 		  // to the register.
