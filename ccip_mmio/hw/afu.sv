@@ -72,7 +72,7 @@ module afu
    assign mmio_hdr = t_ccip_c0_ReqMmioHdr'(rx.c0.hdr);
 
    // Instantiation of fifo
-   logic [63:0] out;
+   wire [63:0] out;
    logic en;
    fifo   buffer(.clk(clk), .rst_n(rst_n), .en(en), .d(user_reg), .q(out));
 
@@ -81,12 +81,7 @@ module afu
    // =============================================================// 		    
    always_ff @(posedge clk or posedge rst)
      begin 
-        if (rst)
-          begin 
-	     // Asnchronous reset for the memory-mapped register.
-	     user_reg <= '0;
-       en <= 0;
-          end
+        if (rst);
         else
           begin
              // Check to see if there is a valid write being received from the processor.
