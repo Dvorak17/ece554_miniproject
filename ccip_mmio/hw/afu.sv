@@ -90,6 +90,7 @@ module afu
         else
           begin
              // Check to see if there is a valid write being received from the processor.
+             en <= 0;
              if (rx.c0.mmioWrValid == 1)
                begin
                  en <= 1;
