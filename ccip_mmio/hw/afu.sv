@@ -75,12 +75,12 @@ module afu
    wire [63:0] out;
    logic [63:0] in;
    logic en;
-   fifo buffer (.clk(clk), .rst_n(rst), .en(en), .d(in), .q(out));
+   fifo buffer (.clk(clk), .rst_n(!rst), .en(en), .d(in), .q(out));
 
    // =============================================================//   
    // MMIO write code
    // =============================================================// 		    
-   always_ff @(posedge clk)
+   always_ff @(posedge clk or posedge rst)
         if (!rst) begin
           en <= 1'b0;
           // Check to see if there is a valid write being received from the processor.
@@ -95,6 +95,8 @@ module afu
               end
             endcase
           end
+        end else begin
+          in <= '0;
         end
 
    // ============================================================= 		    
