@@ -75,7 +75,7 @@ module afu
    wire [63:0] out;
    logic [63:0] in;
    logic en;
-   wire fifo_rst;
+   logic fifo_rst;
    assign fifo_rst = ~rst;
 
    fifo buffer (.clk(clk), .rst_n(fifo_rst), .en(en), .d(in), .q(out));
@@ -83,25 +83,24 @@ module afu
    // =============================================================//   
    // MMIO write code
    // =============================================================// 		    
-   always_ff @(posedge clk or posedge rst) begin
-        if (!rst) begin
-          en <= 1'b0;
-          // Check to see if there is a valid write being received from the processor.
-          if (rx.c0.mmioWrValid == 1) begin
-		        // Check the address of the write request. If it matches the address of the
-		        // memory-mapped register (h0020), then write the received data on channel c0 
-		        // to the register.
-            case (mmio_hdr.address)
-              16'h0020: begin
-                in <= rx.c0.data[63:0];
-                en <= 1'b1;
-              end
-            endcase
+   always_ff @(posedge clk or posedge rst)
+    if (!rst) begin
+      en <= 1'b0;
+      // Check to see if there is a valid write being received from the processor.
+      if (rx.c0.mmioWrValid == 1) begin
+		    // Check the address of the write request. If it matches the address of the
+		    // memory-mapped register (h0020), then write the received data on channel c0 
+		    // to the register.
+        case (mmio_hdr.address)
+          16'h0020: begin
+            in <= rx.c0.data[63:0];
+            en <= 1'b1;
           end
-        end else begin
-          in <= '0;
-        end
-   end
+        endcase
+      end
+    end else begin
+      in <= '0;
+    end
 
    // ============================================================= 		    
    // MMIO read code
