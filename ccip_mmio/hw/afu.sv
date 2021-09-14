@@ -83,7 +83,7 @@ module afu
    // =============================================================//   
    // MMIO write code
    // =============================================================// 		    
-   always_ff @(posedge clk or posedge rst)
+   always_ff @(posedge clk) begin
     if (!rst) begin
       en <= 1'b0;
       // Check to see if there is a valid write being received from the processor.
@@ -98,9 +98,8 @@ module afu
           end
         endcase
       end
-    end else begin
-      in <= '0;
     end
+   end
 
    // ============================================================= 		    
    // MMIO read code
