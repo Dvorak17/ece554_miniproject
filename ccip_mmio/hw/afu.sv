@@ -76,7 +76,7 @@ module afu
    logic [63:0] in;
    logic en;
    wire fifo_rst;
-   assign fifo_rst <= ~rst;
+   assign fifo_rst = ~rst;
 
    fifo buffer (.clk(clk), .rst_n(fifo_rst), .en(en), .d(in), .q(out));
 
