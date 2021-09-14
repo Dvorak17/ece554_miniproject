@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
         cerr << "ERROR: Read from MMIO register has incorrect value " << result << " instead of 0" << endl;
 	      errors ++;
       }
-      if (i > 7 && (result != i - 8)){
-	      cerr << "ERROR: Read from MMIO register has incorrect value " << result << " instead of " << i << endl;
+      if (i > 7 && (result != i - 7)){
+	      cerr << "ERROR: Read from MMIO register has incorrect value " << result << " instead of " << i-7 << endl;
 	      errors ++;
       }
     }
