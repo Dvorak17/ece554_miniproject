@@ -1,0 +1,24 @@
+# No errors on test           0, testcase passed
+# 
+# No errors on test           1, testcase passed
+# 
+# No errors on test           2, testcase passed
+# 
+# No errors on test           3, testcase passed
+# 
+# No errors on test           4, testcase passed
+# 
+# No errors on test           5, testcase passed
+# 
+# No errors on test           6, testcase passed
+# 
+# No errors on test           7, testcase passed
+# 
+# No errors on test           8, testcase passed
+# 
+# No errors on test           9, testcase passed
+# 
+# ** Note: $stop    : C:/Users/Wyatt Dvorak/Documents/554/minilab4-6_team_repo/ece554_miniproject/minilab4/memAB_tb.sv(128)
+#    Time: 2765 ns  Iteration: 1  Instance: /memAB_tb
+# Break in Module memAB_tb at C:/Users/Wyatt Dvorak/Documents/554/minilab4-6_team_repo/ece554_miniproject/minilab4/memAB_tb.sv line 128
+

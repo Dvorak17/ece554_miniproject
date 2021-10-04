@@ -1,0 +1,78 @@
+commit 82e818cfd3ab31ab05a97da0b22f3422325b7a51
+Author: Dvorak17 <wyatt.f.dvorak@gmail.com>
+Date:   Tue Sep 28 23:27:56 2021 -0500
+
+    Passed testbench, working
+
+commit aef266193e677c12301df2b4e488a20933bf8512
+Author: Dvorak17 <wyatt.f.dvorak@gmail.com>
+Date:   Tue Sep 28 19:28:01 2021 -0500
+
+    Fixed errors in memA and memB related to port 'd' size
+
+commit d0d5e193ecb46c591fd95cca1c4315c79de697d4
+Author: Dvorak17 <48167089+Dvorak17@users.noreply.github.com>
+Date:   Tue Sep 28 17:30:37 2021 -0500
+
+    Fixed counter declaration
+
+commit af0c6f9b43b51cea81dc711519dcc86df9b4a9af
+Author: Dvorak17 <48167089+Dvorak17@users.noreply.github.com>
+Date:   Tue Sep 28 17:29:47 2021 -0500
+
+    Update memAB_tb
+
+commit 4c951929b142760659833d0c41affbc9b322c441
+Merge: 95e7169 82f0389
+Author: sjain75 <sjain75@wisc.edu>
+Date:   Tue Sep 28 16:03:56 2021 -0500
+
+    Merge branch 'main' of https://github.com/sjain75/ece554_miniproject into main
+
+commit 95e7169f824da968a535b7b4497be016f096e615
+Author: sjain75 <sjain75@wisc.edu>
+Date:   Tue Sep 28 16:03:50 2021 -0500
+
+    TB for lab3
+
+commit 82f0389281f7e301ed75c627f26d69816d5fea7b
+Author: Ryan Hemmila <ryanhemmila@gmail.com>
+Date:   Tue Sep 28 16:02:33 2021 -0500
+
+    Update fifo.sv
+
+commit 79603787d5a210c4f7ac0e1349eca8005a655080
+Author: Ryan Hemmila <ryanhemmila@gmail.com>
+Date:   Tue Sep 28 15:59:44 2021 -0500
+
+    Update fifo.sv
+
+commit bff3adb51ec8e4d9b96666e1255046d76761ef05
+Author: Dvorak17 <wyatt.f.dvorak@gmail.com>
+Date:   Tue Sep 28 12:45:31 2021 -0500
+
+    Started testbench, instantiated modules
+
+commit 9020f7e17ecd506e1aebbef4bec5cd43b6438dd7
+Author: sjain75 <sjain75@wisc.edu>
+Date:   Thu Sep 23 17:56:48 2021 -0500
+
+    Clean minilab4
+
+commit 392798b3a3c36b83406b227d0c5cf2ba3c6570cf
+Author: Ryan Hemmila <ryanhemmila@gmail.com>
+Date:   Thu Sep 23 17:52:55 2021 -0500
+
+    Add files via upload
+
+commit db38461bd5d43a81b6446e14bccd930ac2a65fab
+Author: sjain75 <sjain75@wisc.edu>
+Date:   Thu Sep 23 17:52:16 2021 -0500
+
+    reinit minilab4
+
+commit b2284e0e774e35a48ffa3df240d94d2393ed5331
+Author: sjain75 <sjain75@wisc.edu>
+Date:   Thu Sep 23 17:51:40 2021 -0500
+
+    init minilab4

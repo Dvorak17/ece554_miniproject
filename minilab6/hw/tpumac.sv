@@ -19,14 +19,12 @@ module tpumac
       Bout <= '0;
       Cout <= '0;
     end else begin
-      if (en) begin
+      if (WrEn) begin
+        Cout <= Cin;
+      end else if (en) begin
         Aout <= Ain;
         Bout <= Bin;
-        if (WrEn) begin
-          Cout <= Cin;
-        end else begin
-          Cout <= (Ain * Bin) + Cin;
-        end
+        Cout <= (Ain * Bin) + Cout;
       end
     end
   end

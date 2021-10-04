@@ -12,19 +12,24 @@ module tpumac
    output reg signed [BITS_C-1:0] Cout
   );
 
-  wire [BITS_C-1:0] matrx_mul_result, C_mux;
+  wire [BITS_C-1:0] C_mux;
 
-  assign matrx_mul_result = (Ain * Bin) + Cout;
-  assign C_mux = WrEn ? Cin : matrx_mul_result;
+  assign C_mux = (Ain * Bin) + Cout;
 
   always_ff @(posedge clk, negedge rst_n) begin
-      if (!rst_n) Aout <=0; Bout <= 0; Cout <= 0;
-      else
-        if (en) begin
-            Aout <= Ain;
-            Bout <= Bin;
-            Cout <= C_mux;
-        end
+      if (!rst_n) begin
+		Aout <=0; 
+		Bout <= 0; 
+		Cout <= 0;
+      end else begin 
+		if (WrEn) begin
+			Cout <= Cin;
+		end else if (en) begin
+			Aout <= Ain;
+			Bout <= Bin;
+			Cout <= C_mux;
+		end
+	  end
   end
-
+endmodule
 // Modelsim prefers "reg signed" over "signed reg"
