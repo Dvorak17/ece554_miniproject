@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <climits>
 #include <unistd.h>
+#include <time.h>
 
 #include <opae/utils.h>
 
@@ -245,9 +246,10 @@ int main(int argc, char *argv[]) {
 		unpack_from_C(c_r, output[c_r], afu);
 	}
 	*/
-
-	total_compute;	
-	start_time = get_clock_time(); 	// grab initial start time
+	
+	struct timespec total_compute, start_time, end_time, start_compute, end_compute;
+	int total_compute_time = 0;
+	clock_gettime(CLOCK_REALTIME, &start_time); 	// grab initial start time
 	for (int i = 0; i < DIM_FULL/8; i++) {
 		for (int j =0; j < DIM_FULL/8; j++) {
 			for (int ii = 0; ii < 8; ii++) {
@@ -258,20 +260,20 @@ int main(int argc, char *argv[]) {
 					send_row_A(ii, &A_vals[i*8 + ii][k], afu);
 					send_row_B(ii, &B_vals[k*8 + ii][i], afu);
 				}
-				start_compute = get_clock_time();
+				clock_gettime(CLOCK_REALTIME, &start_compute);
 				afu.write(0x0400, 100);
-				end_compute = get_clock_time();
-				total_compute += (end_compute - start_compute);
+				clock_gettime(CLOCK_REALTIME, &end_compute);
+				total_compute_time += (end_compute.tv_sec - start_compute.tv_sec);
 			}
 			for (int ii = 0; ii < 8; ii++) {
-				unpack_from_C(ii, output[i*8 + ii][j*8], afu);
+				unpack_from_C(ii, &output[i*8 + ii][j*8], afu);
 			}
 		}
 	}
-	end_time = get_clock_time();
-	total_time = end_time - start_time;
-	ops_rate = 2*DIM_FULL^3 / total_time;	// MM is O(n3) MACs, each MAC is 2 ops
-	compute_ops_rate = 2*DIM_FULL^3 / total_compute; // TOPS ignoring data movement
+	clock_gettime(CLOCK_REALTIME, &end_time);
+	int total_time = end_time.tv_sec - start_time.tv_sec;
+	int ops_rate = 2*DIM_FULL^3 / total_time;	// MM is O(n3) MACs, each MAC is 2 ops
+	int compute_ops_rate = 2*DIM_FULL^3 / total_compute_time; // TOPS ignoring data movement
 	
 	// Compare.
 	fprintf(stdout, "Calculation finished. Testing values...\n");
