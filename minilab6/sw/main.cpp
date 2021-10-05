@@ -53,13 +53,16 @@ using namespace std;
 typedef int8_t AB_TYPE;
 typedef int16_t C_TYPE;
 #define DIM 8
+#define DIM_FULL 16
 #define MAX_VAL _UI16_MAX
 #define DEBUG true
 
-AB_TYPE A_vals[DIM][DIM];
-AB_TYPE B_vals[DIM][DIM];
-C_TYPE output[DIM][DIM];
-C_TYPE output_reference[DIM][DIM];
+
+
+AB_TYPE A_vals[DIM_FULL][DIM_FULL];
+AB_TYPE B_vals[DIM_FULL][DIM_FULL];
+C_TYPE output[DIM_FULL][DIM_FULL];
+C_TYPE output_reference[DIM_FULL][DIM_FULL];
 
 // Reflect Endian
 template<int width, class BT> BT ref_end(BT in)
@@ -168,6 +171,7 @@ void unpack_from_C(uint16_t row, C_TYPE * vals, AFU& afu)
 	}
 }
 
+
 int main(int argc, char *argv[]) {
 
   try {
@@ -184,9 +188,9 @@ int main(int argc, char *argv[]) {
 	fprintf(stdout, "FULL SYSTEM TEST\n---------------\n");
 	fprintf(stdout, "Populating A and B...\n");
 	// Generate A vals, B vals.
-	for(int y_ind = 0; y_ind < DIM; ++y_ind)
+	for(int y_ind = 0; y_ind < DIM_FULL; ++y_ind)
 	{
-		for(int x_ind = 0; x_ind < DIM; ++x_ind)
+		for(int x_ind = 0; x_ind < DIM_FULL; ++x_ind)
 		{
 			A_vals[y_ind][x_ind] = static_cast<int8_t>(rand() % 255);
 			B_vals[y_ind][x_ind] = static_cast<int8_t>(rand() % 255);
@@ -196,14 +200,14 @@ int main(int argc, char *argv[]) {
 
 	fprintf(stdout, "Calculating reference values of C...\n");
 	// Calculate reference C values.
-	for(int y_ind = 0; y_ind < DIM; ++y_ind)
+	for(int y_ind = 0; y_ind < DIM_FULL; ++y_ind)
 	{
-		for(int x_ind = 0; x_ind < DIM; ++x_ind)
+		for(int x_ind = 0; x_ind < DIM_FULL; ++x_ind)
 		{
 			// Calculate C
 			output_reference[y_ind][x_ind] = 0;
 
-			for(ptrdiff_t wh = 0; wh < DIM; ++wh)
+			for(ptrdiff_t wh = 0; wh < DIM_FULL; ++wh)
 			{
 				output_reference[y_ind][x_ind] += A_vals[y_ind][wh] * B_vals[wh][x_ind];
 			}
@@ -211,7 +215,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Now try it with the AFU.
-
+	/*
 	// Write each value of A down.
 	fprintf(stdout, "Loading A into AFU...\n");
 	for(ptrdiff_t a_r = 0; a_r < DIM; ++a_r)
@@ -230,7 +234,8 @@ int main(int argc, char *argv[]) {
 	fprintf(stdout, "Performing Calculation...\n");
 	afu.write(0x0400, 100);
 	// Do we have to sleep?
-//	usleep(1000*1000);
+	//	usleep(1000*1000);
+	
 
 	// Read Values.
 	fprintf(stdout, "Reading Output from C...\n");
@@ -239,12 +244,40 @@ int main(int argc, char *argv[]) {
 	{
 		unpack_from_C(c_r, output[c_r], afu);
 	}
+	*/
 
+	total_compute;	
+	start_time = get_clock_time(); 	// grab initial start time
+	for (int i = 0; i < DIM_FULL/8; i++) {
+		for (int j =0; j < DIM_FULL/8; j++) {
+			for (int ii = 0; ii < 8; ii++) {
+				send_row_C(ii, &output[(i*8)+ii][j*8], afu);
+			}
+			for (int k = 0; k < DIM_FULL/8; k++) {
+				for (int ii = 0; ii < 8; ii++) {
+					send_row_A(ii, &A_vals[i*8 + ii][k], afu);
+					send_row_B(ii, &B_vals[k*8 + ii][i], afu);
+				}
+				start_compute = get_clock_time();
+				afu.write(0x0400, 100);
+				end_compute = get_clock_time();
+				total_compute += (end_compute - start_compute);
+			}
+			for (int ii = 0; ii < 8; ii++) {
+				unpack_from_C(ii, output[i*8 + ii][j*8], afu);
+			}
+		}
+	}
+	end_time = get_clock_time();
+	total_time = end_time - start_time;
+	ops_rate = 2*DIM_FULL^3 / total_time;	// MM is O(n3) MACs, each MAC is 2 ops
+	compute_ops_rate = 2*DIM_FULL^3 / total_compute; // TOPS ignoring data movement
+	
 	// Compare.
 	fprintf(stdout, "Calculation finished. Testing values...\n");
-	for(int r = 0; r < DIM; ++r)
+	for(int r = 0; r < DIM_FULL; ++r)
 	{
-		for(int c = 0; c < DIM; ++c)
+		for(int c = 0; c < DIM_FULL; ++c)
 		{
 			fprintf(stdout, "row: %d, col: %d | got: %hx, expected %hx", r, c, output[r][c], output_reference[r][c]);
 			fflush(stdout);
